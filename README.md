@@ -12,7 +12,8 @@ This repo has sample implementation for following types of concurrent patterns:
 <br />
 
 - >/concurrency_practice/patterns> - package that contains all individual files for their respective pattern
-- >/concurrency_practice/main.go> - main file where you run the code
+- >/concurrency_practive/cli> - package that contains file supporting cli options and features
+- >/concurrency_practice/main.go> - main file which runs the cli and every other module
 
 <br />
 <br />
