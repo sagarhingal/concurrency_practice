@@ -8,12 +8,14 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/inancgumus/screen"
 )
 
 func Menu() {
 
 	// print the menu
-	fmt.Printf("\n------\nMenu -\n------\n1) Fan-In & Fan-Out\n2) Worker-Pool\n3) Try Again\n4) Exit\n")
+	fmt.Printf("\n------\nMenu -\n------\n1) Fan-In & Fan-Out\n2) Worker-Pool\n3) Try Again OR Clear console\n4) Exit\n")
 	// now take the user input
 	buf := bufio.NewReader(os.Stdin)
 	fmt.Printf("\n> ")
@@ -37,17 +39,19 @@ func Menu() {
 	case 1:
 		// call fanIn-fanOut
 		go patterns.TestPatterns()
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(2 * time.Second)
 		Menu()
 	case 2:
 		// TODO: call worker-pool
 		fmt.Printf("\nWorker-pool(2) pattern is yet to be implemented...\nPlease choose from these options:\n")
 		Menu()
 	case 3:
+		screen.Clear()
 		Menu()
 	case 4:
 		break
 	default:
+		screen.Clear()
 		fmt.Printf("invalid choice: %d\nPlease choose from the following menu:\n", choice)
 		Menu()
 	}

@@ -1,7 +1,9 @@
 package patterns
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func TestPatterns() {
-	fmt.Printf("\n\nHi, from Fan-In and Fan-Out\n")
+	fmt.Printf("\nHi, from Fan-In and Fan-Out\n")
 }
