@@ -38,7 +38,7 @@ func Menu() {
 	switch choice {
 	case 1:
 		// call fanIn-fanOut
-		go fanInOut.TrySampleEasy()
+		go fanInOut.TrySample()
 		time.Sleep(2 * time.Second)
 		Menu()
 	case 2:

@@ -19,7 +19,7 @@ var (
 // 				  getVeggies  ->		   -> Paratha
 //										   -> Frankie
 
-func TrySampleEasy() {
+func TrySample() {
 	fmt.Printf("\nHi, from Fan-In and Fan-Out\n---------------------------\n\n")
 	wg := sync.WaitGroup{}
 

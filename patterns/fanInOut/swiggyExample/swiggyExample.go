@@ -1,4 +1,4 @@
-package fanInOut
+package main
 
 import (
 	"fmt"
@@ -23,7 +23,7 @@ func newOrder(items ...Order) <-chan Order {
 	return out
 }
 
-func TrySampleMedium() {
+func main() {
 	//restaurent with n cooks
 	TableOrder := newOrder(Order{item: "Pizza", id: 1, src: "waiter1"},
 		Order{item: "Paratha", id: 2, src: "waiter1"},
