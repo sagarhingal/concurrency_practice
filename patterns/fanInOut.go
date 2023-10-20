@@ -37,7 +37,11 @@ func TryFanInOut() {
 		}()
 	}
 
-	wg.Wait()
+	go func() {
+		wg.Wait()
+		close(dishRequest) // close the dishRequest channel
+	}()
+
 }
 
 func MakeDish(dishRequest chan string, wg *sync.WaitGroup) {
