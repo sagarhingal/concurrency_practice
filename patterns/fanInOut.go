@@ -53,18 +53,17 @@ func MakeDish(dishRequest chan string, wg *sync.WaitGroup) {
 
 	if myPotatoes && myVeggies { // lets read the values now
 		fmt.Printf("Got the potatoes and the veggies!\n")
-		for orderCount <= maxOrderCount {
-			select {
-			case dishName = <-dishRequest:
-				fmt.Printf("Order[%s] received!\n", dishName)
-				orderCount += 1
-				status := processOrder(dishName)
-				if <-status {
-					fmt.Printf("Order[%s] is ready!\n", dishName)
-				}
 
-			default:
-				fmt.Printf("Sorry! Can\\'t make %s, only can make Sandwich & Paratha.", dishName)
+		// look for the orders now
+		for orderCount <= maxOrderCount {
+			dishName = <-dishRequest
+			fmt.Printf("Order[%s] received!\n", dishName)
+			orderCount += 1
+			status := processOrder(dishName)
+
+			// if a status is found, print it
+			if <-status {
+				fmt.Printf("Order[%s] is ready!\n", dishName)
 			}
 		}
 
