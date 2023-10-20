@@ -3,30 +3,39 @@ package patterns
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
 const (
-	maxOrderCount = 2
+	maxOrderCount = 3
+)
+
+var (
+	orderList = []string{"sandwich", "paratha", "frankie"}
 )
 
 // Expected Output
 
 // dishRequest -> getPotatoes ->  MakeDish -> Sandwich
 // 				  getVeggies  ->		   -> Paratha
+//										   -> Frankie
 
 func TryFanInOut() {
-	fmt.Printf("\nHi, from Fan-In and Fan-Out\n")
+	fmt.Printf("\nHi, from Fan-In and Fan-Out\n---------------------------\n\n")
 	wg := sync.WaitGroup{}
 
 	dishRequest := make(chan string)
-
 	wg.Add(1)
-	go MakeDish(dishRequest, &wg)
+	go MakeDish(dishRequest, &wg) // spawn the main go-routine
 
-	dishRequest <- "sandwich"
-
-	dishRequest <- "paratha"
+	// now send the orders through dishRequest channel
+	for _, order := range orderList {
+		wg.Add(1)
+		orderName := order
+		go func() {
+			defer wg.Done()
+			dishRequest <- orderName
+		}()
+	}
 
 	wg.Wait()
 }
@@ -47,20 +56,11 @@ func MakeDish(dishRequest chan string, wg *sync.WaitGroup) {
 		for orderCount <= maxOrderCount {
 			select {
 			case dishName = <-dishRequest:
-				fmt.Printf("Order received for %s!\n", dishName)
-				if dishName == "sandwich" {
-					orderCount += 1
-					status := makeSandwich()
-					if <-status {
-						fmt.Printf("Order[%s] is ready!\n", dishName)
-					}
-				}
-				if dishName == "paratha" {
-					orderCount += 1
-					status := makeParatha()
-					if <-status {
-						fmt.Printf("Order[%s] is ready!\n", dishName)
-					}
+				fmt.Printf("Order[%s] received!\n", dishName)
+				orderCount += 1
+				status := processOrder(dishName)
+				if <-status {
+					fmt.Printf("Order[%s] is ready!\n", dishName)
 				}
 
 			default:
@@ -71,26 +71,16 @@ func MakeDish(dishRequest chan string, wg *sync.WaitGroup) {
 	}
 }
 
-func makeSandwich() <-chan bool {
-	fmt.Printf("Order[Sandwich] in process...\n")
-	sandwich := make(chan bool)
+func processOrder(dishName string) <-chan bool {
+	fmt.Printf("Order[%s] in process...\n", dishName)
+	order := make(chan bool)
 
+	// create its go-routine
 	go func() {
-		sandwich <- true
+		order <- true
 	}()
 
-	return sandwich
-}
-
-func makeParatha() <-chan bool {
-	fmt.Printf("Order[Paratha] in process...\n")
-	paratha := make(chan bool)
-
-	go func() {
-		paratha <- true
-	}()
-
-	return paratha
+	return order
 }
 
 func getPotato() <-chan bool {
@@ -99,9 +89,6 @@ func getPotato() <-chan bool {
 
 	go func() {
 		potatoChan <- true
-
-		// lets give it some time
-		time.Sleep(100 * time.Millisecond)
 	}()
 
 	// then return the channel
@@ -114,9 +101,6 @@ func getVeggies() <-chan bool {
 
 	go func() {
 		veggiesChan <- true
-
-		// lets give this one some time as well
-		time.Sleep(100 * time.Millisecond)
 	}()
 
 	// then return the veggies channel
