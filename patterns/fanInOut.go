@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+// Expected Output
+
+// dishRequest -> getPotatoes ->  MakeDish -> Sandwich
+// 				  getVeggies  ->		   -> Paratha
+
 func TryFanInOut() {
 	fmt.Printf("\nHi, from Fan-In and Fan-Out\n")
 	wg := sync.WaitGroup{}
@@ -13,7 +18,7 @@ func TryFanInOut() {
 	dishRequest := make(chan string)
 
 	wg.Add(1)
-	go MakeDish(&dishRequest, &wg)
+	go MakeDish(dishRequest, &wg)
 
 	dishRequest <- "sandwich"
 
@@ -22,31 +27,39 @@ func TryFanInOut() {
 	wg.Wait()
 }
 
-func MakeDish(dishRequest *chan string, wg *sync.WaitGroup) {
+func MakeDish(dishRequest chan string, wg *sync.WaitGroup) {
 
 	defer wg.Done()
 
-	dishName := <-*dishRequest
-	fmt.Printf("Order received for %s!\n", dishName)
+	var dishName string
+
 	myPotatoes := <-getPotato()
 	myVeggies := <-getVeggies()
 
 	if myPotatoes && myVeggies { // lets read the values now
 		fmt.Printf("Got the potatoes and the veggies!\n")
-		switch dishName {
-		case "sandwich":
-			status := <-makeSandwich()
-			if status {
-				fmt.Printf("Order[%s] is ready!\n", dishName)
+		for {
+			select {
+			case dishName = <-dishRequest:
+				fmt.Printf("Order received for %s!\n", dishName)
+				if dishName == "sandwich" {
+					status := makeSandwich()
+					if <-status {
+						fmt.Printf("Order[%s] is ready!\n", dishName)
+					}
+				}
+				if dishName == "paratha" {
+					status := makeParatha()
+					if <-status {
+						fmt.Printf("Order[%s] is ready!\n", dishName)
+					}
+				}
+
+			default:
+				fmt.Printf("Sorry! Can\\'t make %s, only can make Sandwich & Paratha.", dishName)
 			}
-		case "paratha":
-			status := <-makeParatha()
-			if status {
-				fmt.Printf("Order[%s] is ready!\n", dishName)
-			}
-		default:
-			fmt.Printf("Sorry! Can\\'t make %s, only can make Sandwich & Paratha.", dishName)
 		}
+
 	}
 }
 
@@ -54,7 +67,9 @@ func makeSandwich() <-chan bool {
 	fmt.Printf("Order[Sandwich] in process...\n")
 	sandwich := make(chan bool)
 
-	sandwich <- true
+	go func() {
+		sandwich <- true
+	}()
 
 	return sandwich
 }
@@ -63,7 +78,9 @@ func makeParatha() <-chan bool {
 	fmt.Printf("Order[Paratha] in process...\n")
 	paratha := make(chan bool)
 
-	paratha <- true
+	go func() {
+		paratha <- true
+	}()
 
 	return paratha
 }
