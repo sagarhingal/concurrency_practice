@@ -1,4 +1,4 @@
-package patterns
+package fanInOut
 
 import (
 	"fmt"
@@ -19,7 +19,7 @@ var (
 // 				  getVeggies  ->		   -> Paratha
 //										   -> Frankie
 
-func TryFanInOut() {
+func TrySampleEasy() {
 	fmt.Printf("\nHi, from Fan-In and Fan-Out\n---------------------------\n\n")
 	wg := sync.WaitGroup{}
 

@@ -2,7 +2,7 @@ package cli
 
 import (
 	"bufio"
-	"concurrency_practice/patterns"
+	"concurrency_practice/patterns/fanInOut"
 	"fmt"
 	"os"
 	"strconv"
@@ -38,7 +38,7 @@ func Menu() {
 	switch choice {
 	case 1:
 		// call fanIn-fanOut
-		go patterns.TryFanInOut()
+		go fanInOut.TrySampleEasy()
 		time.Sleep(2 * time.Second)
 		Menu()
 	case 2:
