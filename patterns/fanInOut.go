@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+const (
+	maxOrderCount = 2
+)
+
 // Expected Output
 
 // dishRequest -> getPotatoes ->  MakeDish -> Sandwich
@@ -36,19 +40,23 @@ func MakeDish(dishRequest chan string, wg *sync.WaitGroup) {
 	myPotatoes := <-getPotato()
 	myVeggies := <-getVeggies()
 
+	orderCount := 1
+
 	if myPotatoes && myVeggies { // lets read the values now
 		fmt.Printf("Got the potatoes and the veggies!\n")
-		for {
+		for orderCount <= maxOrderCount {
 			select {
 			case dishName = <-dishRequest:
 				fmt.Printf("Order received for %s!\n", dishName)
 				if dishName == "sandwich" {
+					orderCount += 1
 					status := makeSandwich()
 					if <-status {
 						fmt.Printf("Order[%s] is ready!\n", dishName)
 					}
 				}
 				if dishName == "paratha" {
+					orderCount += 1
 					status := makeParatha()
 					if <-status {
 						fmt.Printf("Order[%s] is ready!\n", dishName)
