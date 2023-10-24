@@ -3,7 +3,7 @@ package cli
 import (
 	"bufio"
 	"concurrency_practice/patterns/fanInOut"
-	workerpool "concurrency_practice/patterns/workerPool"
+	"concurrency_practice/patterns/workerPool"
 	"fmt"
 	"os"
 	"strconv"
@@ -47,7 +47,7 @@ func Menu() {
 	case 2:
 
 		// call worker-pool
-		go workerpool.TryWorkerPool()
+		go workerPool.TryWorkerPool()
 
 		// wait for it to finish
 		time.Sleep(2 * time.Second)
