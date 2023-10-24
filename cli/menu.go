@@ -3,6 +3,7 @@ package cli
 import (
 	"bufio"
 	"concurrency_practice/patterns/fanInOut"
+	workerpool "concurrency_practice/patterns/workerPool"
 	"fmt"
 	"os"
 	"strconv"
@@ -39,11 +40,17 @@ func Menu() {
 	case 1:
 		// call fanIn-fanOut
 		go fanInOut.TrySample()
+
+		// wait for it to finish
 		time.Sleep(2 * time.Second)
 		Menu()
 	case 2:
-		// TODO: call worker-pool
-		fmt.Printf("\nWorker-pool(2) pattern is yet to be implemented...\nPlease choose from these options:\n")
+
+		// call worker-pool
+		go workerpool.TryWorkerPool()
+
+		// wait for it to finish
+		time.Sleep(2 * time.Second)
 		Menu()
 	case 3:
 		screen.Clear()
