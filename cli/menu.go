@@ -13,10 +13,32 @@ import (
 	"github.com/inancgumus/screen"
 )
 
+var (
+	menuList = []string{
+		"Fan-In-Out",
+		"Worker-Pool",
+		"Rate-Limiting",
+		"Circuit-Breaker",
+		"Producer-Consumer",
+		"Publish-Subscribe",
+		"Barrier",
+		"Future",
+		"Pipeline",
+		"Semaphore",
+		"For-Select-Done",
+		"Try Again OR Clear console",
+		"Exit",
+	}
+)
+
 func Menu() {
 
 	// print the menu
-	fmt.Printf("\n------\nMenu -\n------\n1) Fan-In & Fan-Out\n2) Worker-Pool\n3) Try Again OR Clear console\n4) Exit\n")
+	fmt.Printf("\n------\nMenu -\n------\n")
+	for index, menuItem := range menuList {
+		fmt.Printf("%d) %s\n", index+1, menuItem)
+	}
+
 	// now take the user input
 	buf := bufio.NewReader(os.Stdin)
 	fmt.Printf("\n> ")
@@ -45,7 +67,6 @@ func Menu() {
 		time.Sleep(2 * time.Second)
 		Menu()
 	case 2:
-
 		// call worker-pool
 		go workerPool.TryWorkerPool()
 
@@ -53,13 +74,76 @@ func Menu() {
 		time.Sleep(2 * time.Second)
 		Menu()
 	case 3:
-		screen.Clear()
+		// call rate-limiting
+		fmt.Printf("\nwork in progress......please choose from the menu below:\n")
+
+		// wait for it to finish
+		time.Sleep(1 * time.Second)
 		Menu()
 	case 4:
+		// call circuit-breaker
+		fmt.Printf("\nwork in progress......please choose from the menu below:\n")
+
+		// wait for it to finish
+		time.Sleep(1 * time.Second)
+		Menu()
+	case 5:
+		// call producer-consumer
+		fmt.Printf("\nwork in progress......please choose from the menu below:\n")
+
+		// wait for it to finish
+		time.Sleep(1 * time.Second)
+		Menu()
+	case 6:
+		// call publish-subscribe
+		fmt.Printf("\nwork in progress......please choose from the menu below:\n")
+
+		// wait for it to finish
+		time.Sleep(1 * time.Second)
+		Menu()
+	case 7:
+		// call barrier
+		fmt.Printf("\nwork in progress......please choose from the menu below:\n")
+
+		// wait for it to finish
+		time.Sleep(1 * time.Second)
+		Menu()
+	case 8:
+		// call future
+		fmt.Printf("\nwork in progress......please choose from the menu below:\n")
+
+		// wait for it to finish
+		time.Sleep(1 * time.Second)
+		Menu()
+	case 9:
+		// call pipeline
+		fmt.Printf("\nwork in progress......please choose from the menu below:\n")
+
+		// wait for it to finish
+		time.Sleep(1 * time.Second)
+		Menu()
+	case 10:
+		// call semaphore
+		fmt.Printf("\nwork in progress......please choose from the menu below:\n")
+
+		// wait for it to finish
+		time.Sleep(1 * time.Second)
+		Menu()
+	case 11:
+		// call for-select-done
+		fmt.Printf("\nwork in progress......please choose from the menu below:\n")
+
+		// wait for it to finish
+		time.Sleep(1 * time.Second)
+		Menu()
+	case 12:
+		screen.Clear()
+		Menu()
+	case 13:
 		break
 	default:
 		screen.Clear()
-		fmt.Printf("invalid choice: %d\nPlease choose from the following menu:\n", choice)
+		fmt.Printf("\ninvalid choice: %d\nPlease choose from the following menu:\n", choice)
 		Menu()
 	}
 
