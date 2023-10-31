@@ -3,6 +3,7 @@ package cli
 import (
 	"bufio"
 	"concurrency_practice/patterns/fanInOut"
+	"concurrency_practice/patterns/rateLimit"
 	"concurrency_practice/patterns/workerPool"
 	"fmt"
 	"os"
@@ -75,7 +76,7 @@ func Menu() {
 		Menu()
 	case 3:
 		// call rate-limiting
-		fmt.Printf("\nwork in progress......please choose from the menu below:\n")
+		rateLimit.TryRateLimit()
 
 		// wait for it to finish
 		time.Sleep(1 * time.Second)
